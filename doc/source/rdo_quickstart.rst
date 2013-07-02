@@ -6,7 +6,7 @@ Installing RDO - http://openstack.redhat.com
 
 First, create an RDO installation all on localhost.
 
-0. ``sudo yum install -y http://rdo.fedorapeople.org/openstack/openstack-grizzly/rdo-release-grizzly-3.noarch.rpm``
+0. ``sudo yum install -y http://rdo.fedorapeople.org/openstack/openstack-grizzly/rdo-release-grizzly.rpm``
 1. ``sudo yum install -y openstack-packstack``
 2. ``sudo packstack --allinone``
 
