@@ -10,6 +10,20 @@ First, create an RDO installation all on localhost.
 1. ``sudo yum install -y openstack-packstack``
 2. ``sudo packstack --allinone``
 
+START UNDER DEVELOPMENT
+Alternatively, create a multi-host installation. You'll need to make sure you
+have two network interfaces available and connecting all the hosts you
+want in your installation. You will also need password-less ssh access
+to all nodes, or have the root account password available when prompted.
+
+2. ``sudo packstack --install-hosts=$(host $(hostname) | cut -f4 -d\
+),node2's ip, node3's ip, etc`` --os-quantum-install=n --novanetwork-auto-assign-floating-ip=y
+
+Note, --os-quantum-install=n, i.e. use nova-networking, is required
+until Savanna supports quantum/neutron. The missing feature is
+auto assignment of floating IPs.
+END UNDER DEVELOPMENT
+
 Second, stash and load the credentials needed to administer the
 installation.
 
@@ -23,9 +37,22 @@ is possible to setup floating IPs for the installation and run Savanna
 on a separate machine, but that's an advanced topic and out of scope
 for these instructions.
 
-These instructions have been verified using RHEL 6.4. A caveat, while
-https://bugzilla.redhat.com/show_bug.cgi?id=962605 is outstanding, add
-a step after 2. ``sudo iptables -A POSTROUTING -t mangle -p udp
+START UNDER DEVELOPMENT
+All set, unless you did a multi-host install. You'll need to setup
+floating IPs. The floating IPs you get out of the box likely will not
+work. You should delete them,
+
+``nova floating-ip-bulk-delete 10.3.4.0/22``
+
+And add the correct IPs, likely given to you by your network admins,
+
+``nova floating-ip-bulk-create CORRECT-RANGE``
+END UNDER DEVELOPMENT
+
+These instructions have been verified using RHEL 6.4. A caveat, if you did an
+--allinone install and while
+https://bugzilla.redhat.com/show_bug.cgi?id=962605 is outstanding, you
+must also run ``sudo iptables -A POSTROUTING -t mangle -p udp
 --dport 68 -j CHECKSUM --checksum-fill``
 
 Installing and running Savanna - https://savanna.readthedocs.org/en/latest/quickstart.html
@@ -57,7 +84,8 @@ is already running on port 8080. Note, allow_cluster_ops=true is
 necessary until https://bugs.launchpad.net/savanna/+bug/1180151 is
 resolved. Note, $OS_PASSWORD comes from step 4. TODO: Get Savanna to
 use keystonerc_admin env variables and take auth host & port as a
-single configuration parameter.
+single configuration parameter. Note, if you did a multi-host install,
+you will want to use_floating_ips, so remove it from the sed line below.
 
 9. ``export SAVANNA_CONF=~/savanna_env/share/savanna/savanna.conf``
 10. ``sed -e "s/#port=8080/port=18080/" -e "s/#allow_cluster_ops=false/allow_cluster_ops=true/" -e "s/#os_auth_host=openstack/os_auth_host=127.0.0.1/" -e "s/#os_admin_password=nova/os_admin_password=$OS_PASSWORD/" -e "s/#use_floating_ips=true/use_floating_ips=false/" $SAVANNA_CONF.sample > $SAVANNA_CONF``
