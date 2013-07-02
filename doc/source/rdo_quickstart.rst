@@ -76,15 +76,16 @@ Setting up Savanna and OpenStack - https://savanna.readthedocs.org/en/latest/qui
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 First, get your hands on a working Savanna disk image. TODO: Describe
-how to create one. The tar.gz's MD5 hash is *4998e403f559e85be1a5955186a5638e*.
+how to create one. The qcow2's MD5 hash is *ff14810d7b7ded3dc734dc163834fcf0*.
 
-13. ``wget http://savanna-files.mirantis.com/savanna-0.1-hdp-img.tar.gz``
+13. ``export IMAGE_URL=http://savanna-files.mirantis.com/savanna-0.1.2-hadoop.qcow2
+; export IMAGE_NAME=$(basename $IMAGE_URL)``
+14. ``wget $IMAGE_URL``
 
 Second, create an image and record its id
 
-14. ``tar xzf savanna-0.1-hdp-img.tar.gz``
-15. ``glance image-create --name=hdp.image --disk-format=qcow2 --container-format=bare < savanna-0.1-hdp-img.img``
-16. ``export BASE_IMAGE_ID=$(glance image-show hdp.image | grep ' id ' | awk '{print $4}')``
+15. ``glance image-create --name=$IMAGE_NAME --disk-format=qcow2 --container-format=bare < $IMAGE_NAME``
+16. ``export BASE_IMAGE_ID=$(glance image-show $IMAGE_NAME | grep ' id ' | awk '{print $4}')``
 
 Third, open up the SSH (22) port on the default security group
 
@@ -110,5 +111,5 @@ $BASE_IMAGE_ID is from step 16.
 You can now access the Savanna API to interact with your cluster and
 discover information, such as the JobTracker & NameNode IP
 address. You can SSH to that IP as root, the password on
-savanna-0.1-hdp-img is ``swordfish``, and run your expected hadoop
+savanna-0.1.2-hadoop.qcow2 is ``swordfish``, and run your expected hadoop
 commands.
