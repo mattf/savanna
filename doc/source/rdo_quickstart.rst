@@ -73,13 +73,12 @@ Second, setup an environment in which to install and run Savanna
 8. ``pip install savanna``
 
 Third, setup the Savanna configuration file for your OpenStack
-installation. Note, $OS_PASSWORD comes from step 4. TODO: Get Savanna to
-use keystonerc_admin env variables and take auth host & port as a
-single configuration parameter. Note, if you did a multi-host install,
-you will want to use_floating_ips, so remove it from the sed line below.
+installation. Note, $OS_PASSWORD comes from step 4. Note, if you did a
+multi-host install, you will want to use_floating_ips, so remove it
+from the sed line below.
 
 9. ``export SAVANNA_CONF=~/savanna_env/share/savanna/savanna.conf``
-10. ``sed -e "s/#os_auth_host=openstack/os_auth_host=127.0.0.1/" -e "s/#os_admin_password=nova/os_admin_password=$OS_PASSWORD/" -e "s/#use_floating_ips=true/use_floating_ips=false/" $SAVANNA_CONF.sample > $SAVANNA_CONF``
+10. ``sed -e "s/#os_admin_password=nova/os_admin_password=$OS_PASSWORD/" -e "s/#use_floating_ips=true/use_floating_ips=false/" $SAVANNA_CONF.sample > $SAVANNA_CONF``
 
 Finally, initialize the Savanna database and start the Savanna API
 
