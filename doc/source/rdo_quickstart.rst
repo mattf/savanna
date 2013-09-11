@@ -8,7 +8,7 @@ First, create an RDO installation all on localhost.
 
 0. ``sudo yum install -y http://rdo.fedorapeople.org/openstack/openstack-grizzly/rdo-release-grizzly.rpm``
 1. ``sudo yum install -y openstack-packstack``
-2. ``sudo packstack --allinone``
+2. ``sudo packstack --allinone --os-quantum-install=n``
 
 START UNDER DEVELOPMENT
 Alternatively, create a multi-host installation. You'll need to make sure you
@@ -21,7 +21,7 @@ to all nodes, or have the root account password available when prompted.
 
 Note, --os-quantum-install=n, i.e. use nova-networking, is required
 until Savanna supports quantum/neutron. The missing feature is
-auto assignment of floating IPs.
+auto assignment of floating IPs. See https://blueprints.launchpad.net/savanna/+spec/add-neutron-support.
 END UNDER DEVELOPMENT
 
 Second, stash and load the credentials needed to administer the
