@@ -58,15 +58,9 @@ must also run ``sudo iptables -A POSTROUTING -t mangle -p udp
 Installing and running Savanna - https://savanna.readthedocs.org/en/latest/quickstart.html
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Savanna has some dependencies that are not provided in RPM form and
-some dependencies that are provided as RPMs at a different
-version. This introduces complexity, especially since there is overlap
-between the python packages needed by RDO and by Savanna
-(e.g. pycrypto, sqlalchemy and paramiko). To simplify the setup, we'll
-use virtualenv to create an environment for Savanna that is isolated
-from the system environment that RDO is using. Note: There is work to
-be done here to package Savanna's dependencies and resolve version
-conflicts.
+Until Savanna is available in EPEL, see
+https://apps.fedoraproject.org/packages/s/savanna, you will need to
+install using virtualenv and pip.
 
 First, install virtualenv, python-devel and gcc (used during pip installs)
 
