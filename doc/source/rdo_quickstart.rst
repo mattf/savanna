@@ -73,8 +73,7 @@ Second, setup an environment in which to install and run Savanna
 8. ``pip install savanna``
 
 Third, setup the Savanna configuration file for your OpenStack
-installation. Note, Savanna API will run on port 18080, because Swift
-is already running on port 8080. Note, allow_cluster_ops=true is
+installation. Note, allow_cluster_ops=true is
 necessary until https://bugs.launchpad.net/savanna/+bug/1180151 is
 resolved. Note, $OS_PASSWORD comes from step 4. TODO: Get Savanna to
 use keystonerc_admin env variables and take auth host & port as a
@@ -82,7 +81,7 @@ single configuration parameter. Note, if you did a multi-host install,
 you will want to use_floating_ips, so remove it from the sed line below.
 
 9. ``export SAVANNA_CONF=~/savanna_env/share/savanna/savanna.conf``
-10. ``sed -e "s/#port=8080/port=18080/" -e "s/#allow_cluster_ops=false/allow_cluster_ops=true/" -e "s/#os_auth_host=openstack/os_auth_host=127.0.0.1/" -e "s/#os_admin_password=nova/os_admin_password=$OS_PASSWORD/" -e "s/#use_floating_ips=true/use_floating_ips=false/" $SAVANNA_CONF.sample > $SAVANNA_CONF``
+10. ``sed -e "s/#allow_cluster_ops=false/allow_cluster_ops=true/" -e "s/#os_auth_host=openstack/os_auth_host=127.0.0.1/" -e "s/#os_admin_password=nova/os_admin_password=$OS_PASSWORD/" -e "s/#use_floating_ips=true/use_floating_ips=false/" $SAVANNA_CONF.sample > $SAVANNA_CONF``
 
 Finally, initialize the Savanna database and start the Savanna API
 
