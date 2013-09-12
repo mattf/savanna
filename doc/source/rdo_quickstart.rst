@@ -85,8 +85,7 @@ from the sed line below.
 
 Finally, initialize the Savanna database and start the Savanna API
 
-11. ``savanna-manage --config-file $SAVANNA_CONF reset-db --with-gen-templates``
-12. ``savanna-api --config-file $SAVANNA_CONF``
+11. ``savanna-api --config-file $SAVANNA_CONF``
 
 At this point you have a running OpenStack Grizzly instance and the
 Savanna API service running. However, there are no images in glance
@@ -99,17 +98,17 @@ Setting up Savanna and OpenStack - https://savanna.readthedocs.org/en/latest/qui
 First, get your hands on a working Savanna disk image. TODO: Describe
 how to create one. The qcow2's MD5 hash is *10856243711041fac360b1840ccb51dd*.
 
-13. ``export IMAGE_URL=http://savanna-files.mirantis.com/savanna-0.2-vanilla-1.1.2-ubuntu-12.10.qcow2 ; export IMAGE_NAME=$(basename $IMAGE_URL)``
-14. ``wget $IMAGE_URL``
+12. ``export IMAGE_URL=http://savanna-files.mirantis.com/savanna-0.2-vanilla-1.1.2-ubuntu-12.10.qcow2 ; export IMAGE_NAME=$(basename $IMAGE_URL)``
+13. ``wget $IMAGE_URL``
 
 Second, create an image and record its id
 
-15. ``glance image-create --name=$IMAGE_NAME --disk-format=qcow2 --container-format=bare < $IMAGE_NAME``
-16. ``export BASE_IMAGE_ID=$(glance image-show $IMAGE_NAME | grep ' id ' | awk '{print $4}')``
+14. ``glance image-create --name=$IMAGE_NAME --disk-format=qcow2 --container-format=bare < $IMAGE_NAME``
+15. ``export BASE_IMAGE_ID=$(glance image-show $IMAGE_NAME | grep ' id ' | awk '{print $4}')``
 
 Third, open up the SSH (22) port on the default security group
 
-17. ``nova secgroup-add-rule default tcp 22 22 0.0.0.0/0``
+16. ``nova secgroup-add-rule default tcp 22 22 0.0.0.0/0``
 
 Now, all the necessary pieces are in place to start a Hadoop cluster with
 Savanna on OpenStack now. The only thing left to do is try.
@@ -119,14 +118,14 @@ Create a Hadoop cluster
 
 First, get an http command-line client
 
-18. ``easy_install httpie``
+17. ``easy_install httpie``
 
 Second, send a request to Savanna to create a new cluster. Note,
-$BASE_IMAGE_ID is from step 16.
+$BASE_IMAGE_ID is from step 15.
 
-19. ``export TOKEN=$(keystone token-get | grep ' id' | awk '{print $4}')``
-20. ``export TENANT=$(keystone tenant-get $OS_TENANT_NAME | grep ' id ' | awk '{print $4}')``
-21. ``echo "{ \"cluster\": { \"name\": \"hdp-$(date +%s)\", \"node_templates\": { \"jt_nn.small\": 1, \"tt_dn.small\": 3 }, \"base_image_id\": \"$BASE_IMAGE_ID\" } }" | http http://127.0.0.1:18080/v0.2/$TENANT/clusters X-Auth-Token:$TOKEN``
+18. ``export TOKEN=$(keystone token-get | grep ' id' | awk '{print $4}')``
+19. ``export TENANT=$(keystone tenant-get $OS_TENANT_NAME | grep ' id ' | awk '{print $4}')``
+20. ``echo "{ \"cluster\": { \"name\": \"hdp-$(date +%s)\", \"node_templates\": { \"jt_nn.small\": 1, \"tt_dn.small\": 3 }, \"base_image_id\": \"$BASE_IMAGE_ID\" } }" | http http://127.0.0.1:18080/v0.2/$TENANT/clusters X-Auth-Token:$TOKEN``
 
 You can now access the Savanna API to interact with your cluster and
 discover information, such as the JobTracker & NameNode IP
