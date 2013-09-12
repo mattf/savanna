@@ -97,10 +97,9 @@ Setting up Savanna and OpenStack - https://savanna.readthedocs.org/en/latest/qui
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 First, get your hands on a working Savanna disk image. TODO: Describe
-how to create one. The qcow2's MD5 hash is *ff14810d7b7ded3dc734dc163834fcf0*.
+how to create one. The qcow2's MD5 hash is *10856243711041fac360b1840ccb51dd*.
 
-13. ``export IMAGE_URL=http://savanna-files.mirantis.com/savanna-0.1.2-hadoop.qcow2
-; export IMAGE_NAME=$(basename $IMAGE_URL)``
+13. ``export IMAGE_URL=http://savanna-files.mirantis.com/savanna-0.2-vanilla-1.1.2-ubuntu-12.10.qcow2 ; export IMAGE_NAME=$(basename $IMAGE_URL)``
 14. ``wget $IMAGE_URL``
 
 Second, create an image and record its id
