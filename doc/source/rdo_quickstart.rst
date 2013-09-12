@@ -10,6 +10,9 @@ First, create an RDO installation all on localhost.
 1. ``sudo yum install -y openstack-packstack``
 2. ``sudo packstack --allinone --os-quantum-install=n``
 
+Note, make sure your systems have access to updates, the installation
+requires selinux-policy >= 3.7.19-195.el6_4.2.
+
 START UNDER DEVELOPMENT
 Alternatively, create a multi-host installation. You'll need to make sure you
 have two network interfaces available and connecting all the hosts you
