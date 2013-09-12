@@ -120,12 +120,35 @@ First, get an http command-line client
 
 17. ``easy_install httpie``
 
-Second, send a request to Savanna to create a new cluster. Note,
-$BASE_IMAGE_ID is from step 15.
+Second, register and tag the image. Note, $BASE_IMAGE_ID is from step 15.
 
 18. ``export TOKEN=$(keystone token-get | grep ' id' | awk '{print $4}')``
 19. ``export TENANT=$(keystone tenant-get $OS_TENANT_NAME | grep ' id ' | awk '{print $4}')``
-20. ``echo "{ \"cluster\": { \"name\": \"hdp-$(date +%s)\", \"node_templates\": { \"jt_nn.small\": 1, \"tt_dn.small\": 3 }, \"base_image_id\": \"$BASE_IMAGE_ID\" } }" | http http://127.0.0.1:18080/v0.2/$TENANT/clusters X-Auth-Token:$TOKEN``
+20. ``export SAVANNA_URL="http://localhost:8386/v1.0/$TENANT"``
+21. ``http POST $SAVANNA_URL/images/$BASE_IMAGE_ID X-Auth-Token:$TOKEN username=ubuntu``
+22. ``http POST $SAVANNA_URL/images/$BASE_IMAGE_ID/tag X-Auth-Token:$TOKEN tags:='["vanilla", "1.1.2"]'``
+
+Third, create node group templates, one for the master node and one for
+the worker nodes, and record their IDs.
+
+23. ``echo '{"name": "master-tmpl", "flavor_id": "2", "plugin_name": "vanilla", "hadoop_version": "1.1.2", "node_processes": ["jobtracker", "namenode"] }' | http POST $SAVANNA_URL/node-group-templates X-Auth-Token:$TOKEN``
+24. ``export MASTER=*id from step 23*``
+25. ``echo '{"name": "worker-tmpl", "flavor_id": "2", "plugin_name": "vanilla", "hadoop_version": "1.1.2", "node_processes": ["tasktracker", "datanode"] }' | http POST $SAVANNA_URL/node-group-templates X-Auth-Token:$TOKEN``
+26. ``export WORKER=*id from step 25*``
+
+Fourth, create a cluster template consisting of one master and 2
+workers. Also, record the cluster template's ID.
+
+27. ``echo "{\"name\": \"cluster-template\", \"plugin_name\": \"vanilla\", \"hadoop_version\": \"1.1.2\", \"node_groups\": [ { \"name\": \"master\", \"node_group_template_id\": \"$MASTER\", \"count\": 1 }, { \"name\": \"workers\", \"node_group_template_id\": \"$WORKER\", \"count\": 2 } ] }" | http $SAVANNA_URL/cluster-templates X-Auth-Token:$TOKEN``
+28. ``export CLUSTER=*id from step 27*``
+
+Fifth, upload a keypair to use with the cluster.
+
+29. ``nova keypair-add keypair0 --pub-key ~/.ssh/id_rsa.pub``
+
+Finally, create the cluster.
+
+30. ``echo "{ \"name\": \"cluster-1\", \"plugin_name\": \"vanilla\", \"hadoop_version\": \"1.1.2\", \"cluster_template_id\" : \"$CLUSTER\", \"user_keypair_id\": \"keypair0\", \"default_image_id\": \"$BASE_IMAGE_ID\" }" | http $SAVANNA_URL/clusters X-Auth-Token:$TOKEN``
 
 You can now access the Savanna API to interact with your cluster and
 discover information, such as the JobTracker & NameNode IP
