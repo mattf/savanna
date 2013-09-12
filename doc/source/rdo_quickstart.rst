@@ -152,6 +152,5 @@ Finally, create the cluster.
 
 You can now access the Savanna API to interact with your cluster and
 discover information, such as the JobTracker & NameNode IP
-address. You can SSH to that IP as root, the password on
-savanna-0.1.2-hadoop.qcow2 is ``swordfish``, and run your expected hadoop
-commands.
+address. You can SSH to that IP as ubuntu using your ssh keypair, and
+run your expected hadoop commands.
