@@ -20,7 +20,7 @@ want in your installation. You will also need password-less ssh access
 to all nodes, or have the root account password available when prompted.
 
 2. ``sudo packstack --install-hosts=$(host $(hostname) | cut -f4 -d\
-),node2's ip, node3's ip, etc`` --os-quantum-install=n --novanetwork-auto-assign-floating-ip=y
+),node2's ip, node3's ip, etc --os-quantum-install=n --novanetwork-auto-assign-floating-ip=y``
 
 Note, --os-quantum-install=n, i.e. use nova-networking, is required
 until Savanna supports quantum/neutron. The missing feature is
